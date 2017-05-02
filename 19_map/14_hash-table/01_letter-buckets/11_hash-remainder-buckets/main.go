@@ -20,24 +20,26 @@ func main()  {
 	// Set the split function for the scanning operation.
 	scanner.Split(bufio.ScanWords)
 	// Create slice to hold counts
-	buckets := make([]int, 200)
-	words := make([]string, 200)
+	buckets := make([]int, 12)
+	words := make([]string, 12)
 	// Loop over the words
 	for scanner.Scan() {
-		n := hashBucket(scanner.Text())
+		n := hashBucket(scanner.Text(), 12)
 		buckets[n]++
-		words[n] += " " + scanner.Text()
-	}
-	//fmt.Println(buckets[65:123])
-	fmt.Println("***********")
-	for i := 28; i < 126; i++ {
-		fmt.Printf("%v - %c - %v \n", i, i, buckets[i])
-		if string(i) == "x" || string(i) == "z"{
-			fmt.Println(words[i])
+
+		if len(words[n]) < 50 {
+			words[n] += " " + scanner.Text()
 		}
+	}
+	fmt.Println(buckets)
+
+	for i := 0; i <= 11; i++ {
+		fmt.Println(i, words[i])
 	}
 }
 
-func hashBucket(word string) int {
-	return int(word[0])
+func hashBucket(word string, buckets int) int  {
+	letter := int(word[0])
+	bucket := letter % buckets
+	return bucket
 }
